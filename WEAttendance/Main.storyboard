@@ -281,7 +281,7 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="a8U-Tx-BLw" kind="show" animates="NO" id="Hkp-us-AaD"/>
+                                    <action selector="backBtnPressed:" destination="ec2-Gy-1qW" eventType="touchUpInside" id="CGY-aZ-DxH"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is your record for" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q5h-Tx-wIF">
@@ -454,7 +454,7 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="a8U-Tx-BLw" kind="show" animates="NO" id="uRL-fa-yLN"/>
+                                    <action selector="backBtnPressed:" destination="Yfe-Lb-0BU" eventType="touchUpInside" id="qX0-IK-2xX"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -513,6 +513,5 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="wsL-mb-FdA"/>
-        <segue reference="Hkp-us-AaD"/>
     </inferredMetricsTieBreakers>
 </document>
