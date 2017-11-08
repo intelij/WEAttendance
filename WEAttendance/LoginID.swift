@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LoginID.swift
 //  iAttendance
 //
 //  Created by Prasidha Timsina on 10/12/17.
@@ -7,6 +7,11 @@
 //
 
 import UIKit
+
+var NetID : String = ""
+var Lastname : String = ""
+var Numclass : Int = 0
+
 
 class LoginID: UIViewController, UITextFieldDelegate {
     
@@ -22,21 +27,22 @@ class LoginID: UIViewController, UITextFieldDelegate {
     
     var myVar : String = ""
     
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         login(TextInput.text!)
         // print(self.myVar)
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute:
-            {
-                self.decide()
-        })
+//        DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute:
+//            {
+//                self.decide()
+//        })
         return true
     }
     
     
     func login(_ netid: String) {
         
-        let postEndpoint: String = "https://xzhu2.w3.uvm.edu/WeAttend/test.php?netId="+netid
+        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/getStuInfo.php?netId="+netid
         guard let url = URL(string: postEndpoint) else {
             print("Error: cannot create URL")
             return
@@ -55,10 +61,24 @@ class LoginID: UIViewController, UITextFieldDelegate {
                     return   print("error trying to convert data to JSON")
                 }
                 let status = jo["isStudent"] as! String
+                let classlist = jo["classList"] as! NSArray
+                print(classlist.count)
+                Numclass = classlist.count
                 print(jo)
-                // print("Value for key1 is", jo["isStudent"]!)
-                //   print(status)
+                if (classlist.count != 0){
+                for n in 0...classlist.count-1
+                {
+                let clas = classlist[n] as! NSDictionary
+                print(clas["courseNum"]!)
+                }
+                }else {
+                    print ("error!")
+                }
+
                 self.myVar = status
+                
+                Lastname = jo["givenName"]! as! String
+                
                 // print("555",self.myVar)
             }
             else{
@@ -80,6 +100,7 @@ class LoginID: UIViewController, UITextFieldDelegate {
             {
                 self.decide()
         })
+        NetID = TextInput.text!
     }
     
     
@@ -88,14 +109,16 @@ class LoginID: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    
     @IBAction func viewClick(_ sender: AnyObject) {
         TextInput.resignFirstResponder()
         
     }
     func decide(){
         if self.myVar == "true"{
-            UserDefaults.standard.set(TextInput.text, forKey: "NetID")
-            performSegue(withIdentifier: "toMainSegue", sender: self)
+            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let newViewController = storyBoard.instantiateViewController(withIdentifier: "ClassList")
+            self.present(newViewController, animated: false, completion: nil)
         }
         else if self.myVar == "false"{
             let alertController = UIAlertController(title: "Opps!", message: "This is not a correct NetID. Please try again!", preferredStyle: UIAlertControllerStyle.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
@@ -113,6 +136,7 @@ class LoginID: UIViewController, UITextFieldDelegate {
             self.present(alertController, animated: true, completion: nil)
         }
     }
+   
     
 }
 

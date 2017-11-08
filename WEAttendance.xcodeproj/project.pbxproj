@@ -15,9 +15,10 @@
 		186AD5981FAA25F1008487D0 /* ClassStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AD5931FAA25F0008487D0 /* ClassStatus.swift */; };
 		186AD5991FAA25F1008487D0 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AD5941FAA25F0008487D0 /* Tab.swift */; };
 		186AD59B1FAA2667008487D0 /* AboutUs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AD59A1FAA2667008487D0 /* AboutUs.swift */; };
+		18F479981FB3A0AC00EF67D5 /* LoginID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F479971FB3A0AC00EF67D5 /* LoginID.swift */; };
+		18F4799A1FB3A13A00EF67D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18F479991FB3A13A00EF67D5 /* Main.storyboard */; };
+		18F4799C1FB3A22E00EF67D5 /* DisplayAttendance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F4799B1FB3A22D00EF67D5 /* DisplayAttendance.swift */; };
 		638D44481FA29EC5001BB1B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638D44471FA29EC5001BB1B8 /* AppDelegate.swift */; };
-		638D444A1FA29EC6001BB1B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638D44491FA29EC6001BB1B8 /* ViewController.swift */; };
-		638D444D1FA29EC6001BB1B8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 638D444B1FA29EC6001BB1B8 /* Main.storyboard */; };
 		638D444F1FA29EC6001BB1B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 638D444E1FA29EC6001BB1B8 /* Assets.xcassets */; };
 		638D44521FA29EC6001BB1B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 638D44501FA29EC6001BB1B8 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -30,11 +31,12 @@
 		186AD5931FAA25F0008487D0 /* ClassStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassStatus.swift; sourceTree = "<group>"; };
 		186AD5941FAA25F0008487D0 /* Tab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		186AD59A1FAA2667008487D0 /* AboutUs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUs.swift; sourceTree = "<group>"; };
+		18F479971FB3A0AC00EF67D5 /* LoginID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginID.swift; sourceTree = "<group>"; };
+		18F479991FB3A13A00EF67D5 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		18F4799B1FB3A22D00EF67D5 /* DisplayAttendance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayAttendance.swift; path = "../../WEAttendance-master 2/WEAttendance/DisplayAttendance.swift"; sourceTree = "<group>"; };
 		630512961FA29FA9000593AC /* ObjCBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCBridge.h; sourceTree = "<group>"; };
 		638D44441FA29EC5001BB1B8 /* WEAttendance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WEAttendance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		638D44471FA29EC5001BB1B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		638D44491FA29EC6001BB1B8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		638D444C1FA29EC6001BB1B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		638D444E1FA29EC6001BB1B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		638D44511FA29EC6001BB1B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		638D44531FA29EC6001BB1B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -85,9 +87,10 @@
 		638D44461FA29EC5001BB1B8 /* WEAttendance */ = {
 			isa = PBXGroup;
 			children = (
+				18F4799B1FB3A22D00EF67D5 /* DisplayAttendance.swift */,
+				18F479991FB3A13A00EF67D5 /* Main.storyboard */,
+				18F479971FB3A0AC00EF67D5 /* LoginID.swift */,
 				638D44471FA29EC5001BB1B8 /* AppDelegate.swift */,
-				638D44491FA29EC6001BB1B8 /* ViewController.swift */,
-				638D444B1FA29EC6001BB1B8 /* Main.storyboard */,
 				186AD59A1FAA2667008487D0 /* AboutUs.swift */,
 				638D444E1FA29EC6001BB1B8 /* Assets.xcassets */,
 				638D44501FA29EC6001BB1B8 /* LaunchScreen.storyboard */,
@@ -178,9 +181,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18F4799A1FB3A13A00EF67D5 /* Main.storyboard in Resources */,
 				638D44521FA29EC6001BB1B8 /* LaunchScreen.storyboard in Resources */,
 				638D444F1FA29EC6001BB1B8 /* Assets.xcassets in Resources */,
-				638D444D1FA29EC6001BB1B8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,10 +247,11 @@
 			files = (
 				0847A53D1FB0AB4100514629 /* MonitoringRegion.swift in Sources */,
 				186AD5971FAA25F1008487D0 /* ClassList.swift in Sources */,
-				638D444A1FA29EC6001BB1B8 /* ViewController.swift in Sources */,
 				638D44481FA29EC5001BB1B8 /* AppDelegate.swift in Sources */,
+				18F4799C1FB3A22E00EF67D5 /* DisplayAttendance.swift in Sources */,
 				186AD59B1FAA2667008487D0 /* AboutUs.swift in Sources */,
 				186AD5961FAA25F1008487D0 /* Menu.swift in Sources */,
+				18F479981FB3A0AC00EF67D5 /* LoginID.swift in Sources */,
 				186AD5981FAA25F1008487D0 /* ClassStatus.swift in Sources */,
 				186AD5951FAA25F1008487D0 /* CheckAttendance.swift in Sources */,
 				186AD5991FAA25F1008487D0 /* Tab.swift in Sources */,
@@ -257,14 +261,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		638D444B1FA29EC6001BB1B8 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				638D444C1FA29EC6001BB1B8 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		638D44501FA29EC6001BB1B8 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -389,11 +385,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8C7J44B8T5;
+				DEVELOPMENT_TEAM = MC478T7EL7;
 				INFOPLIST_FILE = WEAttendance/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Xuanyi.Zhu.WEAttendance;
+				PRODUCT_BUNDLE_IDENTIFIER = zshan.WEAttendance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "${PROJECT_NAME}/ObjCBridge.h";
 				SWIFT_VERSION = 4.0;
@@ -407,11 +403,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8C7J44B8T5;
+				DEVELOPMENT_TEAM = MC478T7EL7;
 				INFOPLIST_FILE = WEAttendance/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Xuanyi.Zhu.WEAttendance;
+				PRODUCT_BUNDLE_IDENTIFIER = zshan.WEAttendance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "${PROJECT_NAME}/ObjCBridge.h";
 				SWIFT_VERSION = 4.0;
