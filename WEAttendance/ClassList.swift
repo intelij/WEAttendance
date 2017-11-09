@@ -38,14 +38,15 @@ class ClassList: UIViewController {
         super.viewDidLoad()
     }
     
+    let delayTime = DispatchTime.now() + 1
+    
     override func viewDidAppear(_ animated: Bool){
         if (Numclass != 0){
             login(NetID)
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute:
-                {
-                    self.display()
-                    
-            })
+            DispatchQueue.main.asyncAfter(deadline: delayTime) {
+                self.display()
+            }
+
         }else {
             let alertController = UIAlertController(title: "Opps!", message: "You do not have class on your record now. Please contact with registrar office!", preferredStyle: UIAlertControllerStyle.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
             
