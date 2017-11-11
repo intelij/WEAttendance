@@ -11,6 +11,7 @@ import UIKit
 var classnums = [String]()
 var classsec = [String]()
 var classdis = [String]()
+var classID = [String]()
 var Numclassnow : Int = 0
 
 
@@ -69,19 +70,23 @@ class ClassStatus: UIViewController {
                     let CourseS = clas["courseSubj"] as! String
                     let CourseN = clas["courseNum"] as! String
                     let CourseE = clas["section"] as! String
+                    let CourseB = clas["sectionId"] as! String
                     //                        self.classnums.append(CourseS+" "+CourseN)
                     classsec.append("Section "+CourseE)
                     if (CourseN.count==1){
                         classnums.append(CourseS+" "+"00"+CourseN)
                         classdis.append(CourseS+" "+"00"+CourseN+" "+"Section "+CourseE)
+                        classID.append(CourseB)
                     }
                     else if (CourseN.count==2){
                         classnums.append(CourseS+" "+"0"+CourseN)
                         classdis.append(CourseS+" "+"0"+CourseN+" "+"Section "+CourseE)
+                        classID.append(CourseB)
                     }
                     else{
                         classnums.append(CourseS+" "+CourseN)
                         classdis.append(CourseS+" "+CourseN+" "+"Section "+CourseE)
+                        classID.append(CourseB)
                     }     
                     }
                     
@@ -108,6 +113,7 @@ class ClassStatus: UIViewController {
                 
                 print(classnums)
                 print(classsec)
+                print(classID)
                 
             }
             else{

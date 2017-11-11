@@ -8,6 +8,7 @@
 
 import UIKit
 var classchoose : String = ""
+var classdisID : String = ""
 
 class CheckAttendance: UIViewController,UIPickerViewDelegate, UIPickerViewDataSource {
 
@@ -54,7 +55,9 @@ class CheckAttendance: UIViewController,UIPickerViewDelegate, UIPickerViewDataSo
 
         print(classdis[row])
         classchoose = classdis[row]
+        classdisID = classID[row]
         print(classdis[row])
+        print(classdisID)
     }
 
 }

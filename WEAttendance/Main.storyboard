@@ -293,6 +293,12 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time interval: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKG-Jp-HM6">
+                                <rect key="frame" x="36.999999999999993" y="137" width="110.33333333333331" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -304,14 +310,17 @@
                             <constraint firstItem="bRi-JL-Kdu" firstAttribute="leading" secondItem="8hu-uP-tXM" secondAttribute="leading" constant="37" id="KOu-Y2-j5n"/>
                             <constraint firstItem="q5h-Tx-wIF" firstAttribute="top" secondItem="bRi-JL-Kdu" secondAttribute="bottom" id="KXS-a8-jMn"/>
                             <constraint firstItem="q5h-Tx-wIF" firstAttribute="leading" secondItem="8hu-uP-tXM" secondAttribute="leading" constant="37" id="QnR-dx-1ee"/>
+                            <constraint firstItem="bKG-Jp-HM6" firstAttribute="top" secondItem="q5h-Tx-wIF" secondAttribute="bottom" id="dQ6-8V-80X"/>
                             <constraint firstItem="1BZ-aq-uIB" firstAttribute="top" secondItem="sOY-Ny-PRe" secondAttribute="top" id="dr1-ay-gnw"/>
                             <constraint firstItem="mlT-eK-je9" firstAttribute="top" secondItem="1BZ-aq-uIB" secondAttribute="bottom" id="ftu-7H-kTg"/>
                             <constraint firstItem="1BZ-aq-uIB" firstAttribute="leading" secondItem="sOY-Ny-PRe" secondAttribute="leading" constant="-293" id="hCp-i2-8Xd"/>
+                            <constraint firstItem="bKG-Jp-HM6" firstAttribute="leading" secondItem="8hu-uP-tXM" secondAttribute="leading" constant="37" id="x3S-jr-zAm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="8hu-uP-tXM"/>
                     </view>
                     <connections>
                         <outlet property="ClassLabel" destination="q5h-Tx-wIF" id="w21-Ce-QEi"/>
+                        <outlet property="DateLabel" destination="bKG-Jp-HM6" id="RuY-ct-vyP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Eik-1w-Kf3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -393,7 +402,7 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="Yfe-Lb-0BU" kind="show" id="wak-ne-edZ"/>
+                                    <segue destination="Yfe-Lb-0BU" kind="show" animates="NO" id="wak-ne-edZ"/>
                                 </connections>
                             </button>
                         </subviews>
