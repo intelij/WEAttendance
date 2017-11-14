@@ -11,12 +11,17 @@ import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate {
-
+    
     var window: UIWindow?
     let beaconManager = ESTBeaconManager()
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // set up beacon manager
+        ESTConfig.setupAppID("weattendance-2lq", andAppToken: "a65fb0eb6418d444bc866aa8b5d44e15")
+        
+        self.beaconManager.delegate = self
+        //TODO: ask user again if location isn't always on
+        self.beaconManager.requestAlwaysAuthorization()
         
         // ask the user to allow notifications
         let center = UNUserNotificationCenter.current()
@@ -30,8 +35,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         
         var vc: UIViewController
         
-        
-        
         if(UserDefaults.standard.value(forKey: "NetID") as? String) == nil{
             
             vc = storyboard.instantiateViewController(withIdentifier: "LoginID")
@@ -39,32 +42,85 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         }else{
             
             vc = storyboard.instantiateInitialViewController()!
-            
+            // set up the monitor regions
+            getRegion(netId: (UserDefaults.standard.value(forKey: "NetID") as! String))
+            loadRegions()
+            startMonitorRegions()
         }
         
         self.window?.rootViewController = vc
         
         self.window?.makeKeyAndVisible()
-        ESTConfig.setupAppID("weattendance-2lq", andAppToken: "a65fb0eb6418d444bc866aa8b5d44e15")
         
-        self.beaconManager.delegate = self
-        self.beaconManager.requestAlwaysAuthorization()
-        
-        // set up the monitor regions
-        loadRegions()
-        self.beaconManager.startMonitoring(for: CLBeaconRegion(
-            proximityUUID: UUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")!,
-            major: 45268, identifier: ""))
+        // Example code,
+        //        self.beaconManager.startMonitoring(for: CLBeaconRegion(
+        //            proximityUUID: UUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")!,
+        //            major: 45268, identifier: ""))
         
         return true
     }
     
-    
+    // find all the regions in the userdefult, monitor the first 20 of them
+    func startMonitorRegions(){
+        let regions = getRegionsArray()
+        var end = 0
+        //make sure no more than 20 regions is moniotred
+        if(regions.count < 20 && regions.count > 0){
+            end = regions.count-1
+        }else if(regions.count >= 20){
+            end = 19
+        }
+        if(end != 0){
+            for i in 0...end{
+                print("monitoring uuid: \(regions[i].uuid), major: \(regions[i].major), minor: \(regions[i].minor)")
+                self.beaconManager.startMonitoring(for: CLBeaconRegion(
+                    proximityUUID: UUID(uuidString: regions[i].uuid)!,
+                    major: UInt16(regions[i].major)!, minor: UInt16(regions[i].minor)!, identifier: ""))
+            }
+        }
+    }
     
     // set given an array of monitoringRegion to UserDefaults where key is "monitorRegions"
     func setRegion(regions: [MonitoringRegion]) {
         let regionsData = NSKeyedArchiver.archivedData(withRootObject: regions)
         UserDefaults.standard.set(regionsData, forKey: "monitorRegions")
+    }
+    
+    // get all the class location and corespond region uuid, major and minor
+    func getRegion(netId: String) {
+        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/getClassMonitorRegions.php?netId=" + netId
+        guard let url = URL(string: postEndpoint) else {
+            print("Error: cannot create URL")
+            return
+        }
+        let urlRequest = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: urlRequest, completionHandler: {
+            (data, response, error) in
+            // If data exists, grab it and set it to our global variable
+            if (error == nil) {
+                let jo : NSDictionary
+                do {
+                    jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                    let regions = jo["regions"] as! NSArray
+                    var regionsArray = [MonitoringRegion]()
+                    let regionsNum = regions.count
+                    for n in 0...regionsNum-1{
+                        let region = regions[n] as! NSDictionary
+                        let region1 = MonitoringRegion(subject: (region["subject"] as! String), courseNum: region["courseNum"] as! String, section: region["section"] as! String, buildingArea: (region["buildingArea"] as! String), room: region["room"] as! String, uuid: region["uuid"] as! String, major: region["major"] as! String, minor: region["minor"] as! String)
+                        regionsArray.append(region1)
+                    }
+                    self.setRegion(regions: regionsArray)
+                }
+                catch {
+                    return print("error trying to convert data to JSON")
+                }
+            }
+            else{
+                print("error calling GET on /posts/1")
+                print(error)
+            }
+        })
+        task.resume()
     }
     
     // print out current monitoring region
@@ -73,7 +129,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
             print("'monitorRegions' not found in UserDefaults")
             return
         }
-        
         guard let regions = NSKeyedUnarchiver.unarchiveObject(with: RegionsData as Data) as? [MonitoringRegion] else {
             print("Could not unarchive from RegionsData")
             return
@@ -81,7 +136,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         
         for region in regions {
             print("")
-            print("date: \(region.date)")
+            print("courseNum: \(region.courseNum)")
+            print("uuid: \(region.uuid)")
+            print("major: \(region.major)")
+            print("minor: \(region.minor)")
         }
     }
     
@@ -102,7 +160,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         }
         return regions
     }
-
+    
     
     
     func showNotification(title: String, body: String) {
@@ -120,12 +178,61 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
     
     
     func beaconManager(_ manager: Any, didEnter region: CLBeaconRegion) {
+        
         print("enter")
+        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/checkIn.php?netId=\(String(describing: UserDefaults.standard.value(forKey: "NetID") as? String)) &uuid=\(region.proximityUUID)&major=\(String(describing: region.major))&minor=\(String(describing: region.minor))&identifier=\(String(describing: region.identifier))&status=checkIn)"
+        guard let url = URL(string: postEndpoint) else {
+            print("Error: cannot create URL")
+            return
+        }
+        let urlRequest = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: urlRequest, completionHandler: {
+            (data, response, error) in
+            // If data exists, grab it and set it to our global variable
+            if (error == nil) {
+                let jo : NSDictionary
+                do {
+                    jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                }
+                catch {
+                    return print("error trying to convert data to JSON")
+                }
+            }
+            else{
+                print("error calling GET on /posts/1")
+                print(error)
+            }
+        })
+        task.resume()
         showNotification(title: "Hello!", body: "You entered the range of a beacon!")
         
     }
     func beaconManager(_ manager: Any, didExitRegion region: CLBeaconRegion) {
         print("exit")
+        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/checkIn.php?netId=\(String(describing: UserDefaults.standard.value(forKey: "NetID") as? String)) &uuid=\(region.proximityUUID)&major=\(String(describing: region.major))&minor=\(String(describing: region.minor))&identifier=\(String(describing: region.identifier))&status=checkOut)"
+        guard let url = URL(string: postEndpoint) else {
+            print("Error: cannot create URL")
+            return
+        }
+        let urlRequest = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: urlRequest, completionHandler: {
+            (data, response, error) in
+            // If data exists, grab it and set it to our global variable
+            if (error == nil) {
+                let jo : NSDictionary
+                do {
+                    jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                }
+                catch {
+                    return print("error trying to convert data to JSON")
+                }
+            }
+            else{
+                print("error calling GET on /posts/1")
+                print(error)
+            }
+        })
+        task.resume()
         showNotification(title: "GoodBye!", body: "You left the range of a beacon!")
     }
     func beaconManager(_ manager: Any, didDetermineInitialState state: ESTMonitoringState,

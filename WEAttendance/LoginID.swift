@@ -14,7 +14,7 @@ var Numclass : Int = 0
 
 
 class LoginID: UIViewController, UITextFieldDelegate {
-    
+//    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     @IBOutlet weak var TextInput: UITextField!
     
     
@@ -116,6 +116,9 @@ class LoginID: UIViewController, UITextFieldDelegate {
     }
     func decide(){
         if self.myVar == "true"{
+//            appDelegate.getRegion(netId: NetID)
+//            appDelegate.loadRegions()
+//            appDelegate.startMonitorRegions()
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let newViewController = storyBoard.instantiateViewController(withIdentifier: "ClassList")
             self.present(newViewController, animated: false, completion: nil)
