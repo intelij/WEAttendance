@@ -8,6 +8,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="AppleSDGothicNeo.ttc">
+            <string>AppleSDGothicNeo-Regular</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--LoginID-->
         <scene sceneID="VmF-e9-jgh">
@@ -338,12 +343,33 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BackgroundW" translatesAutoresizingMaskIntoConstraints="NO" id="xSI-e1-5fg">
                                 <rect key="frame" x="-293" y="0.0" width="1000" height="687"/>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="xMark" translatesAutoresizingMaskIntoConstraints="NO" id="1lF-Xb-9ou">
+                                <rect key="frame" x="57" y="203.66666666666663" width="300" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="D36-s9-9Ki"/>
+                                    <constraint firstAttribute="width" constant="300" id="qNh-b2-CEu"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are out of range of a classroom" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hHk-e0-I35">
+                                <rect key="frame" x="0.0" y="533.66666666666663" width="414" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="T1v-YL-IxX"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="23"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="sNx-Ae-Vd1" firstAttribute="trailing" secondItem="hHk-e0-I35" secondAttribute="trailing" id="1jn-0b-HWn"/>
+                            <constraint firstItem="hHk-e0-I35" firstAttribute="top" secondItem="1lF-Xb-9ou" secondAttribute="bottom" constant="30" id="IB5-g1-eZK"/>
                             <constraint firstItem="xSI-e1-5fg" firstAttribute="top" secondItem="rKJ-ub-m1K" secondAttribute="top" id="Ig3-Gb-Q8R"/>
                             <constraint firstItem="xSI-e1-5fg" firstAttribute="bottom" secondItem="sNx-Ae-Vd1" secondAttribute="bottom" id="Q0v-yU-Pw6"/>
                             <constraint firstAttribute="trailing" secondItem="xSI-e1-5fg" secondAttribute="trailing" constant="-293" id="g1O-vu-9rK"/>
+                            <constraint firstItem="hHk-e0-I35" firstAttribute="leading" secondItem="sNx-Ae-Vd1" secondAttribute="leading" id="gh0-Ma-1hd"/>
+                            <constraint firstItem="1lF-Xb-9ou" firstAttribute="centerX" secondItem="sNx-Ae-Vd1" secondAttribute="centerX" id="qGd-Mh-GCM"/>
+                            <constraint firstItem="1lF-Xb-9ou" firstAttribute="centerY" secondItem="sNx-Ae-Vd1" secondAttribute="centerY" id="qnP-DM-dyV"/>
                             <constraint firstItem="xSI-e1-5fg" firstAttribute="leading" secondItem="rKJ-ub-m1K" secondAttribute="leading" constant="-293" id="ySs-g4-5uA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="sNx-Ae-Vd1"/>
@@ -351,10 +377,14 @@
                     <tabBarItem key="tabBarItem" title="" image="status" id="EJV-7I-Odx">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
+                    <connections>
+                        <outlet property="beaconStatus" destination="1lF-Xb-9ou" id="QlR-Av-4AY"/>
+                        <outlet property="beaconStatusLabel" destination="hHk-e0-I35" id="4Av-AS-eyJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X72-75-WUw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1052.1739130434783" y="264.94565217391306"/>
+            <point key="canvasLocation" x="1050.7246376811595" y="264.94565217391306"/>
         </scene>
         <!--Menu-->
         <scene sceneID="3Bw-WZ-289">
@@ -519,6 +549,7 @@
         <image name="attendance" width="30" height="30"/>
         <image name="more" width="30" height="30"/>
         <image name="status" width="30" height="30"/>
+        <image name="xMark" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="wsL-mb-FdA"/>

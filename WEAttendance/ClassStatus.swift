@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 var classnums = [String]()
 var classsec = [String]()
@@ -15,27 +16,54 @@ var classID = [String]()
 var Numclassnow : Int = 0
 
 
-class ClassStatus: UIViewController {
+class ClassStatus: UIViewController, CLLocationManagerDelegate {
 
+    @IBOutlet weak var beaconStatus: UIImageView!
+    
+    @IBOutlet weak var beaconStatusLabel: UILabel!
+    
+    let locationManager = CLLocationManager()
+    let region = CLBeaconRegion(proximityUUID: UUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")!, identifier: "Estimotes")
+    
+    
     override func viewDidLoad() {
-//            classsec.removeAll()
-//            classdis.removeAll()
-//            classnums.removeAll()
+        //            classsec.removeAll()
+        //            classdis.removeAll()
+        //            classnums.removeAll()
         if (classdis.count == 0){
             login(NetID)
         }
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         super.viewDidLoad()
-
+        
+        
+        locationManager.delegate = self
+        if (CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse) {
+            locationManager.requestWhenInUseAuthorization()
+        }
+        locationManager.startRangingBeacons(in: region)
+        
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
+        let knownBeacons = beacons.filter{ $0.proximity != CLProximity.unknown }
+        if (knownBeacons.count > 0) {
+            beaconStatusLabel.text = "You are within range of a classroom"
+            beaconStatus.image = UIImage (named: "checkMark.png")
+        } else {
+            beaconStatusLabel.text = "You are out of range of a classroom "
+            beaconStatus.image = UIImage (named: "xMark.png")
+            
+        }
+    }
+    
+    
     func login(_ netid: String) {
         let gNetID = UserDefaults.standard.value(forKey: "NetID") as? String
         let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/getStuInfo.php?netId="+gNetID!
@@ -61,55 +89,55 @@ class ClassStatus: UIViewController {
                 //                print(jo)
                 Numclassnow = classlist.count
                 print(Numclassnow)
-                 if (classlist.count != 0){
-                for n in 0...Numclassnow-1
-                {
-                    let clas = classlist[n] as! NSDictionary
-                    
-                    print(clas["courseNum"]!)
-                    let CourseS = clas["courseSubj"] as! String
-                    let CourseN = clas["courseNum"] as! String
-                    let CourseE = clas["section"] as! String
-                    let CourseB = clas["sectionId"] as! String
-                    //                        self.classnums.append(CourseS+" "+CourseN)
-                    classsec.append("Section "+CourseE)
-                    if (CourseN.count==1){
-                        classnums.append(CourseS+" "+"00"+CourseN)
-                        classdis.append(CourseS+" "+"00"+CourseN+" "+"Section "+CourseE)
-                        classID.append(CourseB)
-                    }
-                    else if (CourseN.count==2){
-                        classnums.append(CourseS+" "+"0"+CourseN)
-                        classdis.append(CourseS+" "+"0"+CourseN+" "+"Section "+CourseE)
-                        classID.append(CourseB)
-                    }
-                    else{
-                        classnums.append(CourseS+" "+CourseN)
-                        classdis.append(CourseS+" "+CourseN+" "+"Section "+CourseE)
-                        classID.append(CourseB)
-                    }     
+                if (classlist.count != 0){
+                    for n in 0...Numclassnow-1
+                    {
+                        let clas = classlist[n] as! NSDictionary
+                        
+                        print(clas["courseNum"]!)
+                        let CourseS = clas["courseSubj"] as! String
+                        let CourseN = clas["courseNum"] as! String
+                        let CourseE = clas["section"] as! String
+                        let CourseB = clas["sectionId"] as! String
+                        //                        self.classnums.append(CourseS+" "+CourseN)
+                        classsec.append("Section "+CourseE)
+                        if (CourseN.count==1){
+                            classnums.append(CourseS+" "+"00"+CourseN)
+                            classdis.append(CourseS+" "+"00"+CourseN+" "+"Section "+CourseE)
+                            classID.append(CourseB)
+                        }
+                        else if (CourseN.count==2){
+                            classnums.append(CourseS+" "+"0"+CourseN)
+                            classdis.append(CourseS+" "+"0"+CourseN+" "+"Section "+CourseE)
+                            classID.append(CourseB)
+                        }
+                        else{
+                            classnums.append(CourseS+" "+CourseN)
+                            classdis.append(CourseS+" "+CourseN+" "+"Section "+CourseE)
+                            classID.append(CourseB)
+                        }
                     }
                     
                 }
-//                 }else{
-//                    let alertController = UIAlertController(title: "Opps!", message: "You do not have class on your record now. Please contact with registrar office!", preferredStyle: UIAlertControllerStyle.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
-//
-//
-//                    // Replace UIAlertActionStyle.Default by UIAlertActionStyle.default
-//
-//                    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
-//                        (result : UIAlertAction) -> Void in
-//                        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//                        let newViewController = storyBoard.instantiateViewController(withIdentifier: "LoginID")
-//                        self.present(newViewController, animated: false, completion: nil)
-//                        print("OK")
-//                    }
-//
-//
-//                    alertController.addAction(okAction)
-//                    self.present(alertController, animated: true, completion: nil)
-//
-//                }
+                //                 }else{
+                //                    let alertController = UIAlertController(title: "Opps!", message: "You do not have class on your record now. Please contact with registrar office!", preferredStyle: UIAlertControllerStyle.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
+                //
+                //
+                //                    // Replace UIAlertActionStyle.Default by UIAlertActionStyle.default
+                //
+                //                    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
+                //                        (result : UIAlertAction) -> Void in
+                //                        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                //                        let newViewController = storyBoard.instantiateViewController(withIdentifier: "LoginID")
+                //                        self.present(newViewController, animated: false, completion: nil)
+                //                        print("OK")
+                //                    }
+                //
+                //
+                //                    alertController.addAction(okAction)
+                //                    self.present(alertController, animated: true, completion: nil)
+                //
+                //                }
                 
                 print(classnums)
                 print(classsec)
@@ -127,5 +155,6 @@ class ClassStatus: UIViewController {
         task.resume()
         //print("888",self.myVar)
     }
-
+    
 }
+
