@@ -105,20 +105,20 @@ class ClassList: UIViewController {
                         let clas = classlist[n] as! NSDictionary
                         
                         print(clas["courseNum"]!)
-                        let CourseS = clas["courseSubj"] as! String
-                        let CourseN = clas["courseNum"] as! String
-                        if (CourseN.count==1){
-                            self.classnums.append(CourseS+" "+"00"+CourseN)
+                        let courseS = clas["courseSubj"] as! String
+                        let courseN = clas["courseNum"] as! String
+                        if (courseN.count==1){
+                            self.classnums.append(courseS+" "+"00"+courseN)
                         }
-                        else if (CourseN.count==2){
-                            self.classnums.append(CourseS+" "+"0"+CourseN)
+                        else if (courseN.count==2){
+                            self.classnums.append(courseS+" "+"0"+courseN)
                         }
                         else{
-                            self.classnums.append(CourseS+" "+CourseN)
+                            self.classnums.append(courseS+" "+courseN)
                         }
-                        let CourseE = clas["section"] as! String
+                        let courseE = clas["section"] as! String
 //                        self.classnums.append(CourseS+" "+CourseN)
-                        self.classsec.append("Section "+CourseE)
+                        self.classsec.append("Section "+courseE)
                         
                     }
                 

@@ -95,26 +95,26 @@ class ClassStatus: UIViewController, CLLocationManagerDelegate {
                         let clas = classlist[n] as! NSDictionary
                         
                         print(clas["courseNum"]!)
-                        let CourseS = clas["courseSubj"] as! String
-                        let CourseN = clas["courseNum"] as! String
-                        let CourseE = clas["section"] as! String
-                        let CourseB = clas["sectionId"] as! String
+                        let courseS = clas["courseSubj"] as! String
+                        let courseN = clas["courseNum"] as! String
+                        let courseE = clas["section"] as! String
+                        let courseB = clas["sectionId"] as! String
                         //                        self.classnums.append(CourseS+" "+CourseN)
-                        classsec.append("Section "+CourseE)
-                        if (CourseN.count==1){
-                            classnums.append(CourseS+" "+"00"+CourseN)
-                            classdis.append(CourseS+" "+"00"+CourseN+" "+"Section "+CourseE)
-                            classID.append(CourseB)
+                        classsec.append("Section "+courseE)
+                        if (courseN.count==1){
+                            classnums.append(courseS+" "+"00"+courseN)
+                            classdis.append(courseS+" "+"00"+courseN+" "+"Section "+courseE)
+                            classID.append(courseB)
                         }
-                        else if (CourseN.count==2){
-                            classnums.append(CourseS+" "+"0"+CourseN)
-                            classdis.append(CourseS+" "+"0"+CourseN+" "+"Section "+CourseE)
-                            classID.append(CourseB)
+                        else if (courseN.count==2){
+                            classnums.append(courseS+" "+"0"+courseN)
+                            classdis.append(courseS+" "+"0"+courseN+" "+"Section "+courseE)
+                            classID.append(courseB)
                         }
                         else{
-                            classnums.append(CourseS+" "+CourseN)
-                            classdis.append(CourseS+" "+CourseN+" "+"Section "+CourseE)
-                            classID.append(CourseB)
+                            classnums.append(courseS+" "+courseN)
+                            classdis.append(courseS+" "+courseN+" "+"Section "+courseE)
+                            classID.append(courseB)
                         }
                     }
                     
