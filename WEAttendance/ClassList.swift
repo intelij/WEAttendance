@@ -17,6 +17,7 @@ class ClassList: UIViewController {
     @IBOutlet weak var LoadIndicator: UIActivityIndicatorView!
    var classnums = [String]()
    var classsec = [String]()
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     @IBOutlet weak var NameLabel: UILabel!
    
