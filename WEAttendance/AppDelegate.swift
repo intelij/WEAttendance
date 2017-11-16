@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         ESTConfig.setupAppID("weattendance-2lq", andAppToken: "a65fb0eb6418d444bc866aa8b5d44e15")
         
         self.beaconManager.delegate = self
-        //TODO: ask user again if location isn't always on
+        
         self.beaconManager.requestAlwaysAuthorization()
         
         // ask the user to allow notifications
@@ -44,8 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
             vc = storyboard.instantiateInitialViewController()!
             // set up the monitor regions
             getRegion(netId: (UserDefaults.standard.value(forKey: "NetID") as! String))
-            loadRegions()
-            startMonitorRegions()
         }
         
         self.window?.rootViewController = vc
@@ -57,8 +55,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         //            proximityUUID: UUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")!,
         //            major: 45268, identifier: ""))
         
+        if CLLocationManager.locationServicesEnabled() {
+            switch(CLLocationManager.authorizationStatus()) {
+            case .notDetermined, .restricted, .denied:
+                print("No access")
+            case .authorizedAlways:
+                print("Access")
+            case .authorizedWhenInUse:
+                print("when in use")
+                self.beaconManager.requestAlwaysAuthorization()
+            }
+        } else {
+            print("Location services are not enabled")
+        }
+        
         return true
     }
+    
+//    func showEventsAcessDeniedAlert() {
+//        let alertController = UIAlertController(title: "Sad Face Emoji!",
+//                                                message: "The calendar permission was not authorized. Please enable it in Settings to continue.",
+//                                                preferredStyle: .alert)
+//        let settingsAction = UIAlertAction(title: "Settings", style: .default) { (alertAction) in
+//            // THIS IS WHERE THE MAGIC HAPPENS!!!!
+//            if let appSettings = NSURL(string: UIApplicationOpenSettingsURLString) {
+//                UIApplication.shared.openURL(appSettings as URL)
+//            }
+//        }
+//        alertController.addAction(settingsAction)
+//
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+//        alertController.addAction(cancelAction)
+//        presentViewController(alertController, animated: true, completion: nil)
+//    }
     
     // find all the regions in the userdefult, monitor the first 20 of them
     func startMonitorRegions(){
@@ -82,12 +111,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
     
     // set given an array of monitoringRegion to UserDefaults where key is "monitorRegions"
     func setRegion(regions: [MonitoringRegion]) {
+        print("setregion")
         let regionsData = NSKeyedArchiver.archivedData(withRootObject: regions)
         UserDefaults.standard.set(regionsData, forKey: "monitorRegions")
     }
     
     // get all the class location and corespond region uuid, major and minor
     func getRegion(netId: String) {
+        
         let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/getClassMonitorRegions.php?netId=" + netId
         guard let url = URL(string: postEndpoint) else {
             print("Error: cannot create URL")
@@ -110,6 +141,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
                         regionsArray.append(region1)
                     }
                     self.setRegion(regions: regionsArray)
+                    self.loadRegions()
+                    self.startMonitorRegions()
                 }
                 catch {
                     return print("error trying to convert data to JSON")
@@ -180,7 +213,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
     func beaconManager(_ manager: Any, didEnter region: CLBeaconRegion) {
         
         print("enter")
-        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/checkIn.php?netId=\(String(describing: UserDefaults.standard.value(forKey: "NetID") as? String)) &uuid=\(region.proximityUUID)&major=\(String(describing: region.major))&minor=\(String(describing: region.minor))&identifier=\(String(describing: region.identifier))&status=checkIn)"
+        let netid = UserDefaults.standard.value(forKey: "NetID") as! String
+        let uuid = region.proximityUUID
+        let major = region.major as! Int
+        let minor = region.minor as! Int
+        let identifier = ""
+        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/checkIn.php?netId=\(netid)&uuid=\(uuid)&major=\(major)&minor=\(minor)&identifier=\(identifier)&status=checkIn"
+        print(postEndpoint)
         guard let url = URL(string: postEndpoint) else {
             print("Error: cannot create URL")
             return
@@ -204,12 +243,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
             }
         })
         task.resume()
-        showNotification(title: "Hello!", body: "You entered the range of a beacon!")
+        showNotification(title: "Hello!", body: "You entered the range of a beacon! \(region.major)")
         
     }
     func beaconManager(_ manager: Any, didExitRegion region: CLBeaconRegion) {
+        let netid = UserDefaults.standard.value(forKey: "NetID") as! String
+        let uuid = region.proximityUUID
+        let major = region.major as! Int
+        let minor = region.minor as! Int
+        let identifier = ""
+        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/checkIn.php?netId=\(netid)&uuid=\(uuid)&major=\(major)&minor=\(minor)&identifier=\(identifier)&status=checkOut"
         print("exit")
-        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/checkIn.php?netId=\(String(describing: UserDefaults.standard.value(forKey: "NetID") as? String)) &uuid=\(region.proximityUUID)&major=\(String(describing: region.major))&minor=\(String(describing: region.minor))&identifier=\(String(describing: region.identifier))&status=checkOut)"
+        print(postEndpoint)
         guard let url = URL(string: postEndpoint) else {
             print("Error: cannot create URL")
             return
@@ -233,7 +278,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
             }
         })
         task.resume()
-        showNotification(title: "GoodBye!", body: "You left the range of a beacon!")
+        showNotification(title: "GoodBye!", body: "You left the range of a beacon! \(region.major)")
     }
     func beaconManager(_ manager: Any, didDetermineInitialState state: ESTMonitoringState,
                        forBeaconWithIdentifier identifier: String) {
