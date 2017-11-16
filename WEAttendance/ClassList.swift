@@ -22,6 +22,7 @@ class ClassList: UIViewController {
    
     @IBAction func Yesbutton(_ sender: UIButton) {
         UserDefaults.standard.set(NetID, forKey: "NetID")
+        appDelegate.getRegion(netId: (UserDefaults.standard.value(forKey: "NetID") as! String))
     }
     @IBAction func Nobutton(_ sender: UIButton) {
         UserDefaults.standard.removeObject(forKey: "NetID")
