@@ -29,7 +29,8 @@ class CheckAttendance: UIViewController,UIPickerViewDelegate, UIPickerViewDataSo
                 self.Classpick.dataSource = self
                 self.Classpick.delegate = self
         self.Loadindicator.stopAnimating()
-        
+        classchoose = classdis[0]
+        classdisID = classID[0]
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
