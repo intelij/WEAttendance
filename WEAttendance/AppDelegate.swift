@@ -29,6 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
             print("notifications allowed? = \(granted)")
         }
         
+        //ask user to allow location
+        
+        
         self.window = UIWindow(frame: UIScreen.main.bounds)
         
         let storyboard = UIStoryboard(name:"Main",bundle:nil)
@@ -59,6 +62,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
             switch(CLLocationManager.authorizationStatus()) {
             case .notDetermined, .restricted, .denied:
                 print("No access")
+               // UIApplication.sharedApplication().openURL()
+
+                let settings: String = UIApplicationOpenSettingsURLString
+                let settingsURL = URL(string: settings)
+                UIApplication.shared.openURL(settingsURL!)
+                
+                //openURL:options:completionHandler:
+                
             case .authorizedAlways:
                 print("Access")
             case .authorizedWhenInUse:
@@ -71,6 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         
         return true
     }
+
     
 //    func showEventsAcessDeniedAlert() {
 //        let alertController = UIAlertController(title: "Sad Face Emoji!",
