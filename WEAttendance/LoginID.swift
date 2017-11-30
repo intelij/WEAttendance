@@ -11,11 +11,18 @@ import UIKit
 var NetID : String = ""
 var Lastname : String = ""
 var Numclass : Int = 0
+var classnumsfirst = [String]()
+var classsecfirst = [String]()
+var accesscode : Int = 0
+var uvmemail : String = ""
+var counter = 0.0
+var timer = Timer()
 
 
 class LoginID: UIViewController, UITextFieldDelegate {
 //    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     @IBOutlet weak var TextInput: UITextField!
+    
     
     
     override func viewDidLoad() {
@@ -70,11 +77,24 @@ class LoginID: UIViewController, UITextFieldDelegate {
                 {
                 let clas = classlist[n] as! NSDictionary
                 print(clas["courseNum"]!)
+                let courseS = clas["courseSubj"] as! String
+                let courseN = clas["courseNum"] as! String
+                if (courseN.count==1){
+                    classnumsfirst.append(courseS+" "+"00"+courseN)
+                }
+                else if (courseN.count==2){
+                    classnumsfirst.append(courseS+" "+"0"+courseN)
+                }
+                else{
+                    classnumsfirst.append(courseS+" "+courseN)
+                }
+                let courseE = clas["section"] as! String
+                    //                        self.classnums.append(CourseS+" "+CourseN)
+                classsecfirst.append("Section "+courseE)
                 }
                 }else {
                     print ("error!")
                 }
-
                 self.myVar = status
                 
                 Lastname = jo["givenName"]! as! String
@@ -101,6 +121,8 @@ class LoginID: UIViewController, UITextFieldDelegate {
                 self.decide()
         })
         NetID = TextInput.text!
+        uvmemail = NetID + "@uvm.edu"
+        accesscode = Int(arc4random_uniform(999999) + 100000)
     }
     
     
@@ -119,8 +141,43 @@ class LoginID: UIViewController, UITextFieldDelegate {
 //            appDelegate.getRegion(netId: NetID)
 //            appDelegate.loadRegions()
 //            appDelegate.startMonitorRegions()
+            
+            let smtpSession = MCOSMTPSession()
+            smtpSession.hostname = "smtp.gmail.com"
+            smtpSession.username = "WeAttendance@gmail.com"
+            smtpSession.password = "WeAttendance1234"
+            smtpSession.port = 465
+            smtpSession.authType = MCOAuthType.saslPlain
+            smtpSession.connectionType = MCOConnectionType.TLS
+            smtpSession.connectionLogger = {(connectionID, type, data) in
+                if data != nil {
+                    if let string = NSString(data: data!, encoding: String.Encoding.utf8.rawValue){
+                        NSLog("Connectionlogger: \(string)")
+                    }
+                }
+            }
+            let builder = MCOMessageBuilder()
+            builder.header.to = [MCOAddress(displayName: Lastname, mailbox: uvmemail)]
+            builder.header.from = MCOAddress(displayName: "WEAttendance", mailbox: "WeAttendance@gmail.com")
+            builder.header.subject = "WEAttendance Confirmation"
+            builder.htmlBody="<p>Dear \(Lastname):<br /><br />You are using WEAttendance service. This is the access code: \(accesscode), please DO NOT share your access code with anybody. This access code can only be used once. If you are not using WEAttendance, please ignore this email. <br /><br />WEAttendance  </p>"
+            
+            
+            let rfc822Data = builder.data()
+            let sendOperation = smtpSession.sendOperation(with: rfc822Data)
+            sendOperation?.start { (error) -> Void in
+                if (error != nil) {
+                    NSLog("Error sending email: \(String(describing: error))")
+                    
+                    
+                } else {
+                    NSLog("Successfully sent email!")
+                    
+                    
+                }
+            }
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let newViewController = storyBoard.instantiateViewController(withIdentifier: "ClassList")
+            let newViewController = storyBoard.instantiateViewController(withIdentifier: "Confirmation")
             self.present(newViewController, animated: false, completion: nil)
         }
         else if self.myVar == "false"{

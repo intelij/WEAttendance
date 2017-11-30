@@ -10,6 +10,7 @@
 		0847A53D1FB0AB4100514629 /* MonitoringRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0847A53C1FB0AB4100514629 /* MonitoringRegion.swift */; };
 		08CA00711FB3A54F00C50894 /* DisplayAttendance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA00701FB3A54F00C50894 /* DisplayAttendance.swift */; };
 		1097B504108A6AB6E78A762C /* Pods_WEAttendance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0B894A5E340C7D660231653 /* Pods_WEAttendance.framework */; };
+		1866EE4F1FC2134F0096B676 /* Confirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1866EE4E1FC2134F0096B676 /* Confirmation.swift */; };
 		186AD5951FAA25F1008487D0 /* CheckAttendance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AD5901FAA25F0008487D0 /* CheckAttendance.swift */; };
 		186AD5961FAA25F1008487D0 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AD5911FAA25F0008487D0 /* Menu.swift */; };
 		186AD5971FAA25F1008487D0 /* ClassList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AD5921FAA25F0008487D0 /* ClassList.swift */; };
@@ -26,6 +27,7 @@
 /* Begin PBXFileReference section */
 		0847A53C1FB0AB4100514629 /* MonitoringRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoringRegion.swift; sourceTree = "<group>"; };
 		08CA00701FB3A54F00C50894 /* DisplayAttendance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayAttendance.swift; sourceTree = "<group>"; };
+		1866EE4E1FC2134F0096B676 /* Confirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Confirmation.swift; sourceTree = "<group>"; };
 		186AD5901FAA25F0008487D0 /* CheckAttendance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckAttendance.swift; sourceTree = "<group>"; };
 		186AD5911FAA25F0008487D0 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		186AD5921FAA25F0008487D0 /* ClassList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassList.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				08CA00701FB3A54F00C50894 /* DisplayAttendance.swift */,
+				1866EE4E1FC2134F0096B676 /* Confirmation.swift */,
 				18F479991FB3A13A00EF67D5 /* Main.storyboard */,
 				18F479971FB3A0AC00EF67D5 /* LoginID.swift */,
 				638D44471FA29EC5001BB1B8 /* AppDelegate.swift */,
@@ -220,7 +223,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		DDBFF6600F223217EB4FFFB4 /* [CP] Copy Pods Resources */ = {
@@ -249,6 +252,7 @@
 				08CA00711FB3A54F00C50894 /* DisplayAttendance.swift in Sources */,
 				186AD5971FAA25F1008487D0 /* ClassList.swift in Sources */,
 				638D44481FA29EC5001BB1B8 /* AppDelegate.swift in Sources */,
+				1866EE4F1FC2134F0096B676 /* Confirmation.swift in Sources */,
 				186AD59B1FAA2667008487D0 /* AboutUs.swift in Sources */,
 				186AD5961FAA25F1008487D0 /* Menu.swift in Sources */,
 				18F479981FB3A0AC00EF67D5 /* LoginID.swift in Sources */,
@@ -386,11 +390,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = T6W248BLTB;
+				DEVELOPMENT_TEAM = TEDD6NDLB3;
 				INFOPLIST_FILE = WEAttendance/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Tech.Prasidha-WE";
+				PRODUCT_BUNDLE_IDENTIFIER = "zixiaoshan-WE";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "${PROJECT_NAME}/ObjCBridge.h";
@@ -406,11 +410,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = T6W248BLTB;
+				DEVELOPMENT_TEAM = TEDD6NDLB3;
 				INFOPLIST_FILE = WEAttendance/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Tech.Prasidha-WE";
+				PRODUCT_BUNDLE_IDENTIFIER = "zixiaoshan-WE";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "${PROJECT_NAME}/ObjCBridge.h";

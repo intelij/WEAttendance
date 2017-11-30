@@ -15,8 +15,7 @@ class ClassList: UIViewController {
     
     @IBOutlet weak var Coursestack: UIStackView!
     @IBOutlet weak var LoadIndicator: UIActivityIndicatorView!
-   var classnums = [String]()
-   var classsec = [String]()
+
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     @IBOutlet weak var NameLabel: UILabel!
@@ -44,7 +43,6 @@ class ClassList: UIViewController {
     
     override func viewDidAppear(_ animated: Bool){
         if (Numclass != 0){
-            login(NetID)
             DispatchQueue.main.asyncAfter(deadline: delayTime) {
                 self.display()
             }
@@ -75,71 +73,6 @@ class ClassList: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-   
-    
-    func login(_ netid: String) {
-        
-        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/getStuInfo.php?netId="+netid
-        guard let url = URL(string: postEndpoint) else {
-            print("Error: cannot create URL")
-            return
-        }
-        let urlRequest = URLRequest(url: url)
-        let task = URLSession.shared.dataTask(with: urlRequest, completionHandler: {
-            (data, response, error) in
-            // If data exists, grab it and set it to our global variable
-            if (error == nil) {
-                let jo : NSDictionary
-                do {
-                    jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
-                    
-                }
-                catch {
-                    return   print("error trying to convert data to JSON")
-                }
-                let classlist = jo["classList"] as! NSArray
-//                print(classlist.count)
-//                print(jo)
-                
-                    for n in 0...Numclass-1
-                    {
-                        let clas = classlist[n] as! NSDictionary
-                        
-                        print(clas["courseNum"]!)
-                        let courseS = clas["courseSubj"] as! String
-                        let courseN = clas["courseNum"] as! String
-                        if (courseN.count==1){
-                            self.classnums.append(courseS+" "+"00"+courseN)
-                        }
-                        else if (courseN.count==2){
-                            self.classnums.append(courseS+" "+"0"+courseN)
-                        }
-                        else{
-                            self.classnums.append(courseS+" "+courseN)
-                        }
-                        let courseE = clas["section"] as! String
-//                        self.classnums.append(CourseS+" "+CourseN)
-                        self.classsec.append("Section "+courseE)
-                        
-                    }
-                
-                print(self.classnums)
-                print(self.classsec)
-
-            }
-            else{
-                print("error calling GET on /posts/1")
-                print("error")
-            }
-            // print("666",self.myVar)
-        })
-        // Return value of returnedUserID
-        //print("777",self.myVar)
-        task.resume()
-        //print("888",self.myVar)
-    }
-    
     func display(){
 //        let stackView   = UIStackView()
 //        stackView.axis  = UILayoutConstraintAxis.vertical
@@ -157,7 +90,7 @@ class ClassList: UIViewController {
             Csubnum.font = UIFont(name:"Helvetica" ,size: 20)
             Csubnum.widthAnchor.constraint(equalToConstant: self.Coursestack.frame.width).isActive = true
             Csubnum.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
-            Csubnum.text = classnums[i]+"         "+classsec[i]
+            Csubnum.text = classnumsfirst[i]+"         "+classsecfirst[i]
             Csubnum.textAlignment = .center
            // Csubnum.font = Csubnum.font.withSize(30)
             Csubnum.textColor = UIColor.white

@@ -7,5 +7,5 @@ target 'WEAttendance' do
 
   # Pods for WEAttendance
     pod 'EstimoteSDK'
-
+    pod 'mailcore2-ios'
 end

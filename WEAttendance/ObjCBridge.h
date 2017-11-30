@@ -9,5 +9,6 @@
 #ifndef ObjCBridge_h
 #define ObjCBridge_h
 #import <EstimoteSDK/EstimoteSDK.h>
+#import <mailcore2-ios/MailCore/MailCore.h>
 
 #endif /* ObjCBridge_h */
