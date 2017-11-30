@@ -598,14 +598,30 @@
                                     <segue destination="Yfe-Lb-0BU" kind="show" animates="NO" id="wak-ne-edZ"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7L4-m8-ju2">
+                                <rect key="frame" x="37" y="291" width="340" height="50"/>
+                                <color key="backgroundColor" red="0.54248074599999996" green="0.55919793309999999" blue="0.56275777279999994" alpha="0.69523223460000005" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="5IA-lm-KEJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                <state key="normal" title="Turn on Location Services">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="locationSettingsBtn:" destination="jZt-no-BXv" eventType="touchUpInside" id="iwF-Hd-LCQ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="tmM-ei-hTE" firstAttribute="bottom" secondItem="HrK-Xg-mlA" secondAttribute="bottom" id="0b7-mq-rJG"/>
+                            <constraint firstItem="7L4-m8-ju2" firstAttribute="top" secondItem="Sst-Qd-bcV" secondAttribute="bottom" constant="8" id="2i9-if-obo"/>
                             <constraint firstItem="tmM-ei-hTE" firstAttribute="top" secondItem="HMm-9b-Dzi" secondAttribute="top" id="2sW-jy-fbV"/>
                             <constraint firstItem="4hX-MC-h1r" firstAttribute="top" secondItem="ZXR-Ie-QCg" secondAttribute="bottom" constant="62" id="51G-Iu-D2k"/>
                             <constraint firstItem="ZXR-Ie-QCg" firstAttribute="top" secondItem="HrK-Xg-mlA" secondAttribute="top" constant="45" id="9H8-v8-0mn"/>
                             <constraint firstItem="4hX-MC-h1r" firstAttribute="leading" secondItem="HrK-Xg-mlA" secondAttribute="leading" constant="37" id="IBO-9b-9Oq"/>
+                            <constraint firstItem="7L4-m8-ju2" firstAttribute="leading" secondItem="Sst-Qd-bcV" secondAttribute="leading" id="Kto-k7-4S5"/>
                             <constraint firstItem="ZXR-Ie-QCg" firstAttribute="leading" secondItem="HrK-Xg-mlA" secondAttribute="leading" constant="37" id="Neu-VJ-IQa"/>
                             <constraint firstItem="HrK-Xg-mlA" firstAttribute="trailing" secondItem="4hX-MC-h1r" secondAttribute="trailing" constant="37" id="QEu-GT-2iR"/>
                             <constraint firstAttribute="trailing" secondItem="tmM-ei-hTE" secondAttribute="trailing" constant="-293" id="QZm-9h-4mN"/>
@@ -613,6 +629,8 @@
                             <constraint firstItem="HrK-Xg-mlA" firstAttribute="trailing" secondItem="Sst-Qd-bcV" secondAttribute="trailing" constant="37" id="ZLS-mo-kcC"/>
                             <constraint firstItem="Sst-Qd-bcV" firstAttribute="leading" secondItem="HrK-Xg-mlA" secondAttribute="leading" constant="37" id="olt-PO-zte"/>
                             <constraint firstItem="tmM-ei-hTE" firstAttribute="leading" secondItem="HMm-9b-Dzi" secondAttribute="leading" constant="-293" id="rcP-d9-Jtz"/>
+                            <constraint firstItem="7L4-m8-ju2" firstAttribute="centerX" secondItem="Sst-Qd-bcV" secondAttribute="centerX" id="wHT-cj-Vmt"/>
+                            <constraint firstItem="7L4-m8-ju2" firstAttribute="trailing" secondItem="Sst-Qd-bcV" secondAttribute="trailing" id="zaT-JY-OXt"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="HrK-Xg-mlA"/>
                     </view>

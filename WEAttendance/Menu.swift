@@ -47,6 +47,19 @@ class Menu: UIViewController, MFMailComposeViewControllerDelegate {
     }
         }
     
+    @IBAction func locationSettingsBtn(_ sender: UIButton) {
+        if !CLLocationManager.locationServicesEnabled() {
+            if let url = URL(string: "App-Prefs:root=Privacy&path=LOCATION") {
+                // If general location settings are disabled then open general location settings
+                UIApplication.shared.openURL(url)
+            }
+        } else {
+            if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                // If general location settings are enabled then open location settings for the app
+                UIApplication.shared.openURL(url)
+            }
+        }
+    }
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result {
         case .cancelled:
