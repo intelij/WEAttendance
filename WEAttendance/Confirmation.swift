@@ -68,7 +68,10 @@ class Confirmation: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func enterCodeButton(_ sender: UIButton) {
-        if (codeText.isEqual(accesscode)){
+        print("abcd")
+        print(codeText.text)
+        print(accesscode)
+        if (codeText.text!.isEqual(String(accesscode))){
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let newViewController = storyBoard.instantiateViewController(withIdentifier: "ClassList")
             self.present(newViewController, animated: false, completion: nil)
@@ -83,25 +86,10 @@ class Confirmation: UIViewController, UITextFieldDelegate {
                 (result : UIAlertAction) -> Void in
                 print("OK")
             }
-            
-            
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)
         }
     }
-    
-    
-   
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
 
 
