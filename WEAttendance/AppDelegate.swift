@@ -61,15 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         if CLLocationManager.locationServicesEnabled() {
             switch(CLLocationManager.authorizationStatus()) {
             case .notDetermined, .restricted, .denied:
-                print("No access")
-               // UIApplication.sharedApplication().openURL()
-
-                let settings: String = UIApplicationOpenSettingsURLString
-                let settingsURL = URL(string: settings)
-                UIApplication.shared.openURL(settingsURL!)
-                
-                //openURL:options:completionHandler:
-                
+                print("No access")                
             case .authorizedAlways:
                 print("Access")
             case .authorizedWhenInUse:
