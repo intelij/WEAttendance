@@ -17,8 +17,11 @@
 		186AD5981FAA25F1008487D0 /* ClassStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AD5931FAA25F0008487D0 /* ClassStatus.swift */; };
 		186AD5991FAA25F1008487D0 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AD5941FAA25F0008487D0 /* Tab.swift */; };
 		186AD59B1FAA2667008487D0 /* AboutUs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AD59A1FAA2667008487D0 /* AboutUs.swift */; };
+		18CB80551FD8E2F500D144A1 /* Terms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80541FD8E2F500D144A1 /* Terms.swift */; };
 		18F479981FB3A0AC00EF67D5 /* LoginID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F479971FB3A0AC00EF67D5 /* LoginID.swift */; };
 		18F4799A1FB3A13A00EF67D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18F479991FB3A13A00EF67D5 /* Main.storyboard */; };
+		6355004620436BC50023D1C5 /* SendUnsentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6355004520436BC50023D1C5 /* SendUnsentData.swift */; };
+		63706232204A0919004B4F1A /* EventReportFails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63706231204A0919004B4F1A /* EventReportFails.swift */; };
 		638D44481FA29EC5001BB1B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638D44471FA29EC5001BB1B8 /* AppDelegate.swift */; };
 		638D444F1FA29EC6001BB1B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 638D444E1FA29EC6001BB1B8 /* Assets.xcassets */; };
 		638D44521FA29EC6001BB1B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 638D44501FA29EC6001BB1B8 /* LaunchScreen.storyboard */; };
@@ -34,9 +37,12 @@
 		186AD5931FAA25F0008487D0 /* ClassStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassStatus.swift; sourceTree = "<group>"; };
 		186AD5941FAA25F0008487D0 /* Tab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		186AD59A1FAA2667008487D0 /* AboutUs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUs.swift; sourceTree = "<group>"; };
+		18CB80541FD8E2F500D144A1 /* Terms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Terms.swift; sourceTree = "<group>"; };
 		18F479971FB3A0AC00EF67D5 /* LoginID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginID.swift; sourceTree = "<group>"; };
 		18F479991FB3A13A00EF67D5 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		630512961FA29FA9000593AC /* ObjCBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCBridge.h; sourceTree = "<group>"; };
+		6355004520436BC50023D1C5 /* SendUnsentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendUnsentData.swift; sourceTree = "<group>"; };
+		63706231204A0919004B4F1A /* EventReportFails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventReportFails.swift; sourceTree = "<group>"; };
 		638D44441FA29EC5001BB1B8 /* WEAttendance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WEAttendance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		638D44471FA29EC5001BB1B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		638D444E1FA29EC6001BB1B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -89,11 +95,14 @@
 		638D44461FA29EC5001BB1B8 /* WEAttendance */ = {
 			isa = PBXGroup;
 			children = (
+				63706231204A0919004B4F1A /* EventReportFails.swift */,
 				08CA00701FB3A54F00C50894 /* DisplayAttendance.swift */,
 				1866EE4E1FC2134F0096B676 /* Confirmation.swift */,
 				18F479991FB3A13A00EF67D5 /* Main.storyboard */,
+				6355004520436BC50023D1C5 /* SendUnsentData.swift */,
 				18F479971FB3A0AC00EF67D5 /* LoginID.swift */,
 				638D44471FA29EC5001BB1B8 /* AppDelegate.swift */,
+				18CB80541FD8E2F500D144A1 /* Terms.swift */,
 				186AD59A1FAA2667008487D0 /* AboutUs.swift */,
 				638D444E1FA29EC6001BB1B8 /* Assets.xcassets */,
 				638D44501FA29EC6001BB1B8 /* LaunchScreen.storyboard */,
@@ -253,9 +262,12 @@
 				186AD5971FAA25F1008487D0 /* ClassList.swift in Sources */,
 				638D44481FA29EC5001BB1B8 /* AppDelegate.swift in Sources */,
 				1866EE4F1FC2134F0096B676 /* Confirmation.swift in Sources */,
+				18CB80551FD8E2F500D144A1 /* Terms.swift in Sources */,
 				186AD59B1FAA2667008487D0 /* AboutUs.swift in Sources */,
 				186AD5961FAA25F1008487D0 /* Menu.swift in Sources */,
 				18F479981FB3A0AC00EF67D5 /* LoginID.swift in Sources */,
+				6355004620436BC50023D1C5 /* SendUnsentData.swift in Sources */,
+				63706232204A0919004B4F1A /* EventReportFails.swift in Sources */,
 				186AD5981FAA25F1008487D0 /* ClassStatus.swift in Sources */,
 				186AD5951FAA25F1008487D0 /* CheckAttendance.swift in Sources */,
 				186AD5991FAA25F1008487D0 /* Tab.swift in Sources */,
@@ -390,11 +402,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TEDD6NDLB3;
+				DEVELOPMENT_TEAM = T6W248BLTB;
 				INFOPLIST_FILE = WEAttendance/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "zixiaoshan-WE";
+				PRODUCT_BUNDLE_IDENTIFIER = Prasidha.Tech12323;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "${PROJECT_NAME}/ObjCBridge.h";
@@ -410,11 +422,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TEDD6NDLB3;
+				DEVELOPMENT_TEAM = T6W248BLTB;
 				INFOPLIST_FILE = WEAttendance/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "zixiaoshan-WE";
+				PRODUCT_BUNDLE_IDENTIFIER = Prasidha.Tech12323;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "${PROJECT_NAME}/ObjCBridge.h";

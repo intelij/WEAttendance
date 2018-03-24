@@ -18,38 +18,49 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var DateLabel: UILabel!
     @IBOutlet weak var ClassLabel: UILabel!
     var attendinfo = [String]()
+    let myActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
     
     override func viewDidLoad() {
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
-         ClassLabel.text =   "For " + classchoose + classdisID
+        ClassLabel.text =   "For " + classchoose
         displayinterval()
         super.viewDidLoad()
-        tableView = UITableView(frame: CGRect(x:37,y:210,width:300,height:380), style: UITableViewStyle.plain)
+        myActivityIndicator.center = CGPoint(x: view.center.x, y: view.center.y-10)
+        myActivityIndicator.hidesWhenStopped = true
+        myActivityIndicator.startAnimating()
+        view.addSubview(myActivityIndicator)
+        tableView = UITableView(frame: CGRect(x:37,y:210,width:300,height:220), style: UITableViewStyle.plain)
+        tableView.backgroundColor = UIColor(red:0, green:0, blue:0, alpha: 0)
+        tableView.separatorStyle = .none
+        tableView.isUserInteractionEnabled = false
         tableView.dataSource = self
         tableView.delegate = self
+        
         self.view.addSubview(tableView)
         // Do any additional setup after loading the view.
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 5
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numrecord;
-    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 40
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellID = "cell";
-        
         let cell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: cellID)
+        cell.selectionStyle = .none
         let delayTime = DispatchTime.now() + 2
         DispatchQueue.main.asyncAfter(deadline: delayTime) {
             cell.textLabel?.text = self.attendinfo[indexPath.row]
+            self.myActivityIndicator.stopAnimating()
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
     }
     
     override func didReceiveMemoryWarning() {
@@ -61,9 +72,10 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
         dismiss(animated: true, completion: nil)
     }
     
-
+    
     
     @IBAction func previousbutton(_ sender: UIButton) {
+        myActivityIndicator.startAnimating()
         self.attendinfo.removeAll()
         today = Calendar.current.date(byAdding: .day, value: -7, to: today)!
         let dateFormatter = DateFormatter()
@@ -81,7 +93,7 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
                 let dateendFormatter = DateFormatter()
                 dateendFormatter.dateFormat = "yyyy-MM-dd"
                 let weekdateend: String  = dateendFormatter.string(from: weekend)
-                DateLabel.text = weekdatestart+"-"+weekdateend
+                DateLabel.text = weekdatestart+"~"+weekdateend
                 let gNetID = UserDefaults.standard.value(forKey: "NetID") as? String
                 let requestData: String = gNetID!+"&sectionId="+classdisID
                 let Timeinterval: String = "&startDate="+weekdatestart+"&endDate="+weekdateend
@@ -108,19 +120,27 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
                         self.numrecord = attendstatus.count
                         if (self.numrecord != 0){
                             for n in 0...self.numrecord-1
-                        {
-                            let attendlist = attendstatus[n] as! NSDictionary
-                            let attendstatus = attendlist["attend"] as! String
-                            let attenddate = attendlist["date"] as! String
-                            if (attendstatus == "1"){
-                                self.attendinfo.append(attenddate+"   " + " Attend")
+                            {
+                                let attendlist = attendstatus[n] as! NSDictionary
+                                let attendstatus = attendlist["attend"] as! String
+                                let attenddate = attendlist["date"] as! String
+                                if (attendstatus == "1"){
+                                    self.attendinfo.append(attenddate+"   " + " Attend")
+                                }
+                                else if (attendstatus == "0"){
+                                    self.attendinfo.append(attenddate+"   " + " Absent")
+                                }
                             }
-                            else if (attendstatus == "0"){
-                                self.attendinfo.append(attenddate+"   " + " Absent")
-                            }
-                        }
+                                for m in self.numrecord-1...5-(self.numrecord-1)
+                                {
+                                    self.attendinfo.append("------")
+                                }
                         }else{
-                            self.attendinfo.append("No attendance for this week.")
+                            self.attendinfo.append("No attendance this week")
+                            for m in 0...3
+                            {
+                                self.attendinfo.append("------")
+                            }
                         }
                         //print(attendstatus)
                         print(self.attendinfo)
@@ -139,10 +159,11 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
                 //print("888",self.myVar)
                 
             }
-    }
+        }
     }
     
     @IBAction func nextbutton(_ sender: UIButton) {
+        myActivityIndicator.startAnimating()
         self.attendinfo.removeAll()
         today = Calendar.current.date(byAdding: .day, value: +7, to: today)!
         let dateFormatter = DateFormatter()
@@ -197,8 +218,16 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
                                     self.attendinfo.append(attenddate+"   " + " Absent")
                                 }
                             }
+                            for m in self.numrecord-1...5-(self.numrecord-1)
+                            {
+                                self.attendinfo.append("------")
+                            }
                         }else{
-                            self.attendinfo.append("No attendance for this week.")
+                            self.attendinfo.append("No attendance this week")
+                            for m in 0...3
+                            {
+                                self.attendinfo.append("------")
+                            }
                         }
                         //print(attendstatus)
                         print(self.attendinfo)
@@ -215,13 +244,14 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
                 task.resume()
                 self.tableView.reloadData()
                 //print("888",self.myVar)
-            
+                
             }
         }
     }
     
     func displayinterval(){
-//        let calendar = NSCalendar(identifier: NSCalendar.Identifier.gregorian)!
+        //        let calendar = NSCalendar(identifier: NSCalendar.Identifier.gregorian)!
+       
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let todaydate: String  = dateFormatter.string(from: today)
@@ -240,7 +270,7 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
                 let gNetID = UserDefaults.standard.value(forKey: "NetID") as? String
                 let requestData: String = gNetID!+"&sectionId="+classdisID
                 let Timeinterval: String = "&startDate="+weekdate+"&endDate="+todaydate
-        
+                
                 let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/checkAttendance.php?netId="+requestData+Timeinterval
                 print(postEndpoint)
                 guard let url = URL(string: postEndpoint) else {
@@ -255,7 +285,7 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
                         let jo : NSDictionary
                         do {
                             jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
-            
+                            
                             //print(jo)
                         }
                         catch {
@@ -264,21 +294,29 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
                         let attendstatus = jo["history"] as! NSArray
                         print(attendstatus.count)
                         self.numrecord = attendstatus.count
-                        if (self.numrecord != 0){
+                        if (self.numrecord > 0){
                             for n in 0...self.numrecord-1
                             {
                                 let attendlist = attendstatus[n] as! NSDictionary
                                 let attendstatus = attendlist["attend"] as! String
                                 let attenddate = attendlist["date"] as! String
                                 if (attendstatus == "1"){
-                                self.attendinfo.append(attenddate+"   " + " Attend")
+                                    self.attendinfo.append(attenddate+"   " + " Attend")
                                 }
                                 else if (attendstatus == "0"){
                                     self.attendinfo.append(attenddate+"   " + " Absent")
                                 }
                             }
+                            for m in self.numrecord-1...5-(self.numrecord-1)
+                            {
+                                self.attendinfo.append("------")
+                            }
                         }else{
-                            self.attendinfo.append("No attendance for this week.")
+                            self.attendinfo.append("No attendance this week")
+                            for m in 0...3
+                            {
+                                self.attendinfo.append("------")
+                            }
                         }
                         //print(attendstatus)
                         print(self.attendinfo)
@@ -291,7 +329,6 @@ class DisplayAttendance: UIViewController, UITableViewDelegate, UITableViewDataS
                 task.resume()
             }
         }
-        }
-    
+    }
 }
 

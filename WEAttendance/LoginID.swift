@@ -96,6 +96,7 @@ class LoginID: UIViewController, UITextFieldDelegate {
                     print ("error!")
                 }
                 self.myVar = status
+                print(self.myVar)
                 
                 Lastname = jo["givenName"]! as! String
                 
@@ -116,7 +117,7 @@ class LoginID: UIViewController, UITextFieldDelegate {
     @IBAction func LoginButton(_ sender: UIButton) {
         login(TextInput.text!)
         //print(self.myVar)
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute:
+        DispatchQueue.main.asyncAfter(deadline: .now()+1, execute:
             {
                 self.decide()
         })
@@ -136,7 +137,9 @@ class LoginID: UIViewController, UITextFieldDelegate {
         TextInput.resignFirstResponder()
         
     }
+    
     func decide(){
+        print(self.myVar)
         if self.myVar == "true"{
 //            appDelegate.getRegion(netId: NetID)
 //            appDelegate.loadRegions()
@@ -191,12 +194,9 @@ class LoginID: UIViewController, UITextFieldDelegate {
                 print("OK")
             }
             
-            
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)
         }
     }
-   
-    
 }
 

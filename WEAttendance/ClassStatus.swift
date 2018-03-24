@@ -16,15 +16,23 @@ var classID = [String]()
 var Numclassnow : Int = 0
 
 
-class ClassStatus: UIViewController, CLLocationManagerDelegate {
+class ClassStatus: UIViewController, CLLocationManagerDelegate, ESTBeaconManagerDelegate {
+    
+    var window: UIWindow?
+    let beaconManager = ESTBeaconManager()
 
     @IBOutlet weak var beaconStatus: UIImageView!
     
     @IBOutlet weak var beaconStatusLabel: UILabel!
     
     let locationManager = CLLocationManager()
+//    let region = CLBeaconRegion(proximityUUID: UUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")!, identifier: "Estimotes")
     let region = CLBeaconRegion(proximityUUID: UUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")!, identifier: "Estimotes")
+
+
     
+    //for each class
+    //loop though identifiers
     
     override func viewDidLoad() {
         //            classsec.removeAll()
@@ -54,13 +62,63 @@ class ClassStatus: UIViewController, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         let knownBeacons = beacons.filter{ $0.proximity != CLProximity.unknown }
         if (knownBeacons.count > 0) {
-            beaconStatusLabel.text = "You are within range of a classroom"
+            
+            
+            var beaconMajor:String = " "
+
+            let regions = getRegionsArray()
+            var end = 0
+            //make sure no more than 20 regions is moniotred
+            if(regions.count < 20 && regions.count > 0){
+                end = regions.count-1
+            }else if(regions.count >= 20){
+                end = 19
+            }
+            if(end != 0){
+                for i in 0...end{
+                    
+                    print("monitoring uuid: \(regions[i].uuid), major: \(regions[i].major), minor: \(regions[i].minor)")
+                    self.beaconManager.startMonitoring(for: CLBeaconRegion(
+                        proximityUUID: UUID(uuidString: regions[i].uuid)!,
+                        major: UInt16(regions[i].major)!, minor: UInt16(regions[i].minor)!, identifier: ""))
+                    //for loop going though all the majors
+                    beaconMajor = regions[i].major;
+                    if(regions[i].major == "1234"){
+                        //link to get the class name?
+                        //maybe its saved?
+                        beaconStatusLabel.text = "You are in  .... " //+ the class name
+                        
+                    }
+                    
+                }
+            }
+            beaconStatusLabel.text = "You are in classroom with major" + beaconMajor;
             beaconStatus.image = UIImage (named: "checkMark.png")
         } else {
-            beaconStatusLabel.text = "You are out of range of a classroom "
+            beaconStatusLabel.text = "You are out of classroom"
             beaconStatus.image = UIImage (named: "xMark.png")
             
         }
+    }
+    
+ 
+    
+    // return current monitoring region. if the region is not set, return empty array
+    func getRegionsArray() -> Array<MonitoringRegion>{
+        var regions: [MonitoringRegion] = []
+        if(UserDefaults.standard.object(forKey: "monitorRegions") != nil){
+            let RegionsData = UserDefaults.standard.object(forKey: "monitorRegions") as? NSData
+            if(NSKeyedUnarchiver.unarchiveObject(with: RegionsData! as Data) != nil){
+                regions = (NSKeyedUnarchiver.unarchiveObject(with: RegionsData! as Data) as? [MonitoringRegion])!
+            }else{
+                let regionsData = NSKeyedArchiver.archivedData(withRootObject: regions)
+                UserDefaults.standard.set(regionsData, forKey: "monitorRegions")
+            }
+        }else{
+            let regionsData = NSKeyedArchiver.archivedData(withRootObject: regions)
+            UserDefaults.standard.set(regionsData, forKey: "monitorRegions")
+        }
+        return regions
     }
     
     

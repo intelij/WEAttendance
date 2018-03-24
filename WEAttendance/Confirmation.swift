@@ -15,11 +15,18 @@ class Confirmation: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailnoteText: UILabel!
     
     
+    @IBAction func viewClick(_ sender: AnyObject) {
+        codeText.resignFirstResponder()
+    }
+    
+    var sendcount : Int = 1
+    var checksend : String = ""
     override func viewDidLoad() {
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent;
         emailnoteText.text = "We just sent an email to "+uvmemail+" with confirmation code, please enter it here:"
         print(emailnoteText)
         super.viewDidLoad()
+        
         
         // Do any additional setup after loading the view.
     }
@@ -30,6 +37,13 @@ class Confirmation: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func sendAgainButton(_ sender: UIButton) {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        let result = formatter.string(from: date)
+        self.checksend = result + uvmemail + "\(sendcount)"
+        print(self.checksend)
+        if(self.checksend != result + uvmemail + "3"){
         accesscode = Int(arc4random_uniform(999999) + 100000)
         let smtpSession = MCOSMTPSession()
         smtpSession.hostname = "smtp.gmail.com"
@@ -61,12 +75,30 @@ class Confirmation: UIViewController, UITextFieldDelegate {
                 
             } else {
                 NSLog("Successfully sent email!")
-                
+                self.sendcount += 1;
                 
             }
         }
+        }else{
+            let alertController = UIAlertController(title: "Warning!", message: "You have reached 3 emails limit to this email account, please try it tomorrow or contact our custumer service.", preferredStyle: UIAlertControllerStyle.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
+            
+            
+            // Replace UIAlertActionStyle.Default by UIAlertActionStyle.default
+            
+            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
+                (result : UIAlertAction) -> Void in
+                print("OK")
+            }
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
     
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        codeText.resignFirstResponder()
+        return true
+    }
     @IBAction func enterCodeButton(_ sender: UIButton) {
         print("abcd")
         print(codeText.text)

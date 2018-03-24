@@ -15,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
     var window: UIWindow?
     let beaconManager = ESTBeaconManager()
     
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // set up beacon manager
         ESTConfig.setupAppID("weattendance-2lq", andAppToken: "a65fb0eb6418d444bc866aa8b5d44e15")
@@ -61,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         if CLLocationManager.locationServicesEnabled() {
             switch(CLLocationManager.authorizationStatus()) {
             case .notDetermined, .restricted, .denied:
-                print("No access")                
+                print("No access")
             case .authorizedAlways:
                 print("Access")
             case .authorizedWhenInUse:
@@ -71,7 +73,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         } else {
             print("Location services are not enabled")
         }
-        
+        let timeFormate = DateFormatter()
+        timeFormate.dateFormat = "HH:MM:SS"
+        let current = NSDate()
+        let time = timeFormate.string(from: current as Date)
+        let dateFormate = DateFormatter()
+        dateFormate.dateFormat = "YYYY-MM-DD"
+        let date = dateFormate.string(from: current as Date)
+//        let report3 = EventReportFails(netId: "esmith54" , status: "checkIn" , eventTime: time , eventDate: date , uuid: "uuid" , major: "987" , minor: "789")
+//        addReportFails(newReportFail: report3)
         return true
     }
 
@@ -95,6 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
     
     // find all the regions in the userdefult, monitor the first 20 of them
     func startMonitorRegions(){
+        
         let regions = getRegionsArray()
         var end = 0
         //make sure no more than 20 regions is moniotred
@@ -105,11 +116,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         }
         if(end != 0){
             for i in 0...end{
+                
                 print("monitoring uuid: \(regions[i].uuid), major: \(regions[i].major), minor: \(regions[i].minor)")
                 self.beaconManager.startMonitoring(for: CLBeaconRegion(
                     proximityUUID: UUID(uuidString: regions[i].uuid)!,
                     major: UInt16(regions[i].major)!, minor: UInt16(regions[i].minor)!, identifier: ""))
             }
+        }
+        else{
+            print("monitoring uuid: \(regions[0].uuid), major: \(regions[0].major), minor: \(regions[0].minor)")
+            self.beaconManager.startMonitoring(for: CLBeaconRegion(
+                proximityUUID: UUID(uuidString: regions[0].uuid)!,
+                major: UInt16(regions[0].major)!, minor: UInt16(regions[0].minor)!, identifier: ""))
         }
     }
     
@@ -146,6 +164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
                     }
                     self.setRegion(regions: regionsArray)
                     self.loadRegions()
+                    
                     self.startMonitorRegions()
                 }
                 catch {
@@ -154,7 +173,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
             }
             else{
                 print("error calling GET on /posts/1")
-                print(error)
+//                print(error)
             }
         })
         task.resume()
@@ -212,15 +231,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         center.add(request, withCompletionHandler: nil)
     }
     
+    // set given an array of EventReportFails to UserDefaults where key is "reportsFails"
+    func setReportFails(reports: [EventReportFails]) {
+        print("set report fails")
+        let reportFailsData = NSKeyedArchiver.archivedData(withRootObject: reports)
+        UserDefaults.standard.set(reportFailsData, forKey: "reportsFails")
+    }
     
+    // return current ReportFails. if the ReportFails is not set, return empty array
+    func getReportFails() -> Array<EventReportFails>{
+        var reports: [EventReportFails] = []
+        if(UserDefaults.standard.object(forKey: "reportsFails") != nil){
+            let ReportFailsData = UserDefaults.standard.object(forKey: "reportsFails") as? NSData
+            if(NSKeyedUnarchiver.unarchiveObject(with: ReportFailsData! as Data) != nil){
+                reports = (NSKeyedUnarchiver.unarchiveObject(with: ReportFailsData! as Data) as? [EventReportFails])!
+            }else{
+                let reportFailsData = NSKeyedArchiver.archivedData(withRootObject: reports)
+                UserDefaults.standard.set(reportFailsData, forKey: "reportsFails")
+            }
+        }else{
+            let reportFailsData = NSKeyedArchiver.archivedData(withRootObject: reports)
+            UserDefaults.standard.set(reportFailsData, forKey: "reportsFails")
+        }
+        return reports
+    }
     
+    func addReportFails(newReportFail: EventReportFails){
+        var reportFails = getReportFails()
+        reportFails.append(newReportFail)
+        setReportFails(reports: reportFails)
+    }
+    
+
+  
     func beaconManager(_ manager: Any, didEnter region: CLBeaconRegion) {
+        showNotification(title: "Hello!", body: "Testing, entered!")
+
+        var today = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date: String  = dateFormatter.string(from: today)
+        dateFormatter.dateFormat = "HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(identifier: "EDT")
+        let time: String  = dateFormatter.string(from: today)
         
-        print("enter")
+    
+        
         let netid = UserDefaults.standard.value(forKey: "NetID") as! String
-        let uuid = region.proximityUUID
+        let uuid = region.proximityUUID.uuidString
         let major = region.major as! Int
         let minor = region.minor as! Int
+        let checkInStatus = "checkIn"
+
         let identifier = ""
         let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/checkIn.php?netId=\(netid)&uuid=\(uuid)&major=\(major)&minor=\(minor)&identifier=\(identifier)&status=checkIn"
         print(postEndpoint)
@@ -236,34 +298,68 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
                 let jo : NSDictionary
                 do {
                     jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                    let status = jo["updateDB"] as! String
+                    if(status == "true"){
+                        self.showNotification(title: "Hello!", body: "You entered the classroom")
+                    }
+                    else{
+                        self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
+                    }
                 }
                 catch {
+                    self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
                     return print("error trying to convert data to JSON")
                 }
             }
             else{
+                self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
                 print("error calling GET on /posts/1")
-                print(error)
+//                print(error)
             }
         })
         task.resume()
-        showNotification(title: "Hello!", body: "You entered the range of a beacon! \(region.major)")
-        
     }
+    
+    // if the enter/exit event didn't update the db successfully, save the data for later update
+    func saveReportFail(region: CLBeaconRegion, status: String, time: String, netid: String, date: String, uuid: String){
+            let majorFault = String(describing: region.major)
+            let minorFault = String(describing: region.minor)
+        print(date + " date: ")
+            let report1 = EventReportFails(netId: netid , status: status , eventTime: time , eventDate: date , uuid: uuid , major: majorFault , minor: minorFault)
+            addReportFails(newReportFail: report1)
+        if(status == "checkIn"){
+            showNotification(title: "Hi", body: "You entered the classroom. DB didn't get updated")
+        }else{
+            showNotification(title: "Hi", body: "You exited the classroom. DB didn't get updated")
+        }
+    }
+    
     func beaconManager(_ manager: Any, didExitRegion region: CLBeaconRegion) {
+        showNotification(title: "Hello!", body: "Testing, Exited!")
+
         let netid = UserDefaults.standard.value(forKey: "NetID") as! String
-        let uuid = region.proximityUUID
+        let uuid = region.proximityUUID.uuidString
         let major = region.major as! Int
         let minor = region.minor as! Int
         let identifier = ""
-        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/checkIn.php?netId=\(netid)&uuid=\(uuid)&major=\(major)&minor=\(minor)&identifier=\(identifier)&status=checkOut"
+        
+        var today = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date: String  = dateFormatter.string(from: today)
+        dateFormatter.dateFormat = "HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(identifier: "EDT")
+        let time: String  = dateFormatter.string(from: today)
         print("exit")
+        
+        let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/checkIn.php?netId=\(netid)&uuid=\(uuid)&major=\(major)&minor=\(minor)&identifier=\(identifier)&status=checkOut"
         print(postEndpoint)
         guard let url = URL(string: postEndpoint) else {
             print("Error: cannot create URL")
             return
         }
         let urlRequest = URLRequest(url: url)
+        let checkInStatus = "checkOut"
         let task = URLSession.shared.dataTask(with: urlRequest, completionHandler: {
             (data, response, error) in
             // If data exists, grab it and set it to our global variable
@@ -271,18 +367,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
                 let jo : NSDictionary
                 do {
                     jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                    let status = jo["updateDB"] as! String
+                    if(status == "true"){
+                        self.showNotification(title: "bye", body: "You exited the classroom")
+                    }
+                    else{
+                        self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
+                    }
                 }
                 catch {
+                    self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
                     return print("error trying to convert data to JSON")
                 }
             }
             else{
+                self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
                 print("error calling GET on /posts/1")
-                print(error)
+//                print(error)s
             }
         })
         task.resume()
-        showNotification(title: "GoodBye!", body: "You left the range of a beacon! \(region.major)")
     }
     func beaconManager(_ manager: Any, didDetermineInitialState state: ESTMonitoringState,
                        forBeaconWithIdentifier identifier: String) {
@@ -290,6 +394,75 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         print("didDetermineInitialState '\(state)' for beacon \(identifier)")
     }
     
+    
+    func resendData(){
+        
+        var reps = getReportFails()
+
+        
+        for i in reps{
+            print(i.netId)
+            print(i.eventTime)
+            print(i.eventDate)
+            print(i.uuid)
+            print(i.major)
+            print(i.minor)
+            print(i.status)
+            let netid = i.netId
+            let eventTime = i.eventTime
+            let eventDate = i.eventDate
+            let uuid = i.uuid
+            let major = i.major
+            let minor = i.minor
+            let status = i.status
+            //            let identifier = i.identifier
+            //            let date = i.date
+            
+            
+            
+            let checkinError = false;
+            if(checkinError == true){
+                //do check in with data
+            } else {
+                
+                //                    let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/reCheckIn.php?netId=\(netid)&uuid=\(uuid)&major=\(major)&minor=\(minor)&identifier=\(identifier)&time=\(time)&date=\(date)&status=checkOut"
+                let postEndpoint: String="https://www.uvm.edu/~weattend/dbConnection/reCheckIn.php?netId=\(netid)&uuid=\(uuid)&major=\(major)&minor=\(minor)&status=checkOut"
+                guard let url = URL(string: postEndpoint) else {
+                    print("Error: cannot create URL")
+                    return
+                }
+                let urlRequest = URLRequest(url: url)
+                var DBupdated = false;
+                let task = URLSession.shared.dataTask(with: urlRequest, completionHandler: {
+                    (data, response, error) in
+                    // If data exists, grab it and set it to our global variable
+                    if (error == nil) {
+                        let jo : NSDictionary
+                        do {
+                            jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                            let status = jo["updateDB"] as! String
+                            if(status == "true"){
+                                DBupdated = true
+                            } else{
+                                //tell the user to try again in a few minutes.
+                            }
+                        }
+                        catch {
+                            return print("error trying to convert data to JSON")
+                        }
+                    }
+                    else{
+                        print("error calling GET on /posts/1")
+                        //                print(error)s
+                    }
+                })
+                task.resume()
+                
+                
+            }
+            
+        }
+    }
     
     
     
