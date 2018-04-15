@@ -92,10 +92,12 @@ class ClassStatus: UIViewController, CLLocationManagerDelegate, ESTBeaconManager
                     
                 }
             }
-            beaconStatusLabel.text = "You are in classroom with major" + beaconMajor;
+//            beaconStatusLabel.text = "You are in classroom with major" + beaconMajor;
+            beaconStatusLabel.text = "You're within range of a class / event!"
+
             beaconStatus.image = UIImage (named: "checkMark.png")
         } else {
-            beaconStatusLabel.text = "You are out of classroom"
+            beaconStatusLabel.text = "You are out of range of a class / event"
             beaconStatus.image = UIImage (named: "xMark.png")
             
         }

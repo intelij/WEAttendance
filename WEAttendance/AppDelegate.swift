@@ -265,7 +265,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
 
   
     func beaconManager(_ manager: Any, didEnter region: CLBeaconRegion) {
-        showNotification(title: "Hello!", body: "Testing, entered!")
 
         var today = Date()
         let dateFormatter = DateFormatter()
@@ -274,7 +273,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
         dateFormatter.dateFormat = "HH:mm:ss"
         dateFormatter.timeZone = TimeZone(identifier: "EDT")
         let time: String  = dateFormatter.string(from: today)
-        
+        SendUnSentData()
     
         
         let netid = UserDefaults.standard.value(forKey: "NetID") as! String
@@ -298,12 +297,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
                 let jo : NSDictionary
                 do {
                     jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                    let noClass = jo["noClass"] as! Bool
                     let status = jo["updateDB"] as! String
-                    if(status == "true"){
-                        self.showNotification(title: "Hello!", body: "You entered the classroom")
+                   
+                    if(!noClass){
+                        print(noClass)
+                        self.showNotification(title: "Hey!", body: "Welcome to 5K run!")
+                        if(status != "true"){
+                            
+                            self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
+                        }
                     }
                     else{
-                        self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
+                        print(noClass)
                     }
                 }
                 catch {
@@ -328,21 +334,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
             let report1 = EventReportFails(netId: netid , status: status , eventTime: time , eventDate: date , uuid: uuid , major: majorFault , minor: minorFault)
             addReportFails(newReportFail: report1)
         if(status == "checkIn"){
-            showNotification(title: "Hi", body: "You entered the classroom. DB didn't get updated")
+            self.showNotification(title: "Hey!", body: "Welcome to 5K run!")
+            showNotification(title: "Ops!", body: "Seems like we couldn't save that entry!")
         }else{
-            showNotification(title: "Hi", body: "You exited the classroom. DB didn't get updated")
+            self.showNotification(title: "Bye!", body: "Hope you enjoyed the run!")
+            showNotification(title: "Ops", body: "Seems like we couldn't save that entry!")
         }
     }
     
     func beaconManager(_ manager: Any, didExitRegion region: CLBeaconRegion) {
-        showNotification(title: "Hello!", body: "Testing, Exited!")
 
         let netid = UserDefaults.standard.value(forKey: "NetID") as! String
         let uuid = region.proximityUUID.uuidString
         let major = region.major as! Int
         let minor = region.minor as! Int
         let identifier = ""
-        
+        SendUnSentData()
         var today = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -367,13 +374,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
                 let jo : NSDictionary
                 do {
                     jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                    let noClass = jo["noClass"] as! Bool
                     let status = jo["updateDB"] as! String
-                    if(status == "true"){
-                        self.showNotification(title: "bye", body: "You exited the classroom")
+                    
+                    if(!noClass){
+                        print(noClass)
+                        self.showNotification(title: "Bye!", body: "Hope you enjoyed the run!")
+                        if(status != "true"){
+                           
+                            self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
+                        }
                     }
                     else{
-                        self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
+                        print(noClass)
                     }
+//                    let status = jo["updateDB"] as! String
+//                    if(status == "true"){
+//                        self.showNotification(title: "bye", body: "You exited the classroom")
+//                    }
+//                    else{
+//                        self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
+//                    }
                 }
                 catch {
                     self.saveReportFail(region: region, status: checkInStatus, time: time, netid: netid, date: date, uuid: uuid)
@@ -463,8 +484,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ESTBeaconManagerDelegate 
             
         }
     }
+    var newReports: [EventReportFails] = []
+    func SendUnSentData(){
+        var reps = getReportFails()
+        var arrayOfSuccessfulUpdate = [Int]()
+        
+        var indexOfSuccessfulUpdate = 0
+        print("upload fail num: ", reps.count)
+        for (index, item) in reps.enumerated(){
+            print("working on index: ", index)
+            let netid = item.netId
+            let eventTime = item.eventTime
+            let eventDate = item.eventDate
+            let uuid = item.uuid
+            var major = item.major
+            major = major.trimmingCharacters(in: CharacterSet(charactersIn: "01234567890.").inverted)
+            var minor = item.minor
+            minor = minor.trimmingCharacters(in: CharacterSet(charactersIn: "01234567890.").inverted)
+            let status = item.status
+            
+            print(netid)
+            print(eventTime)
+            print(eventDate)
+            print(uuid)
+            print(major)
+            print(minor)
+            print(status)
+            reCheckIn(netid: netid, uuid:uuid, major:major, minor:minor, eventTime:eventTime, eventDate: eventDate, status: status)
+        }
+        
+        setReportFails(reports: newReports)
+    }
     
+    func reCheckIn(netid: String, uuid:String, major:String, minor:String, eventTime:String, eventDate: String, status: String){
+        print("rechecking")
+        let postEndpoint: String="https://www.uvm.edu/~weattend/dbConnection/reCheckIn.php?netId=\(netid)&uuid=\(uuid)&major=\(major)&minor=\(minor)&date=\(eventDate)&time=\(eventTime)&status=checkOut"
+        print(postEndpoint)
+        guard let url = URL(string: postEndpoint) else {
+            print("Error: cannot create URL")
+            return
+        }
+        let urlRequest = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: urlRequest, completionHandler: {
+            (data, response, error) in
+            // If data exists, grab it and set it to our global variable
+            if (error == nil) {
+                let jo : NSDictionary
+                do {
+                    jo = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                    let updateStatus = jo["updateDB"] as! String
+                    if(updateStatus != "true"){
+                        self.saveReportFailWithDetails(major: major, minor: minor, status: status, time: eventTime, netid: netid, date: eventDate, uuid: uuid)
+                    }
+                }
+                catch {
+                    self.saveReportFailWithDetails(major: major, minor: minor, status: status, time: eventTime, netid: netid, date: eventDate, uuid: uuid)
+                    return print("error trying to convert data to JSON")
+                }
+            }
+            else{
+                self.saveReportFailWithDetails(major: major, minor: minor, status: status, time: eventTime, netid: netid, date: eventDate, uuid: uuid)
+                print("error calling GET on /posts/1")
+            }
+        })
+        task.resume()
+    }
     
+        func saveReportFailWithDetails(major: String, minor: String, status: String, time: String, netid: String, date: String, uuid: String){
+            let report1 = EventReportFails(netId: netid , status: status , eventTime: time , eventDate: date , uuid: uuid , major: major , minor: minor)
+            newReports.append(report1)
+        }
     
     
     func applicationWillResignActive(_ application: UIApplication) {

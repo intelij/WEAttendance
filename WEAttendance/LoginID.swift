@@ -50,11 +50,13 @@ class LoginID: UIViewController, UITextFieldDelegate {
     func login(_ netid: String) {
         
         let postEndpoint: String = "https://www.uvm.edu/~weattend/dbConnection/getStuInfo.php?netId="+netid
+        
         guard let url = URL(string: postEndpoint) else {
             print("Error: cannot create URL")
             return
         }
         let urlRequest = URLRequest(url: url)
+        print(url)
         let task = URLSession.shared.dataTask(with: urlRequest, completionHandler: {
             (data, response, error) in
             // If data exists, grab it and set it to our global variable
@@ -122,7 +124,8 @@ class LoginID: UIViewController, UITextFieldDelegate {
                 self.decide()
         })
         NetID = TextInput.text!
-        uvmemail = NetID + "@uvm.edu"
+//        uvmemail = NetID + "@uvm.edu"
+        uvmemail = NetID
         accesscode = Int(arc4random_uniform(999999) + 100000)
     }
     
@@ -140,10 +143,8 @@ class LoginID: UIViewController, UITextFieldDelegate {
     
     func decide(){
         print(self.myVar)
-        if self.myVar == "true"{
-//            appDelegate.getRegion(netId: NetID)
-//            appDelegate.loadRegions()
-//            appDelegate.startMonitorRegions()
+        //Check if netID is student
+//        if self.myVar == "true"{
             
             let smtpSession = MCOSMTPSession()
             smtpSession.hostname = "smtp.gmail.com"
@@ -182,21 +183,22 @@ class LoginID: UIViewController, UITextFieldDelegate {
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let newViewController = storyBoard.instantiateViewController(withIdentifier: "Confirmation")
             self.present(newViewController, animated: false, completion: nil)
-        }
-        else if self.myVar == "false"{
-            let alertController = UIAlertController(title: "Opps!", message: "This is not a correct NetID. Please try again!", preferredStyle: UIAlertControllerStyle.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
-            
-            
-            // Replace UIAlertActionStyle.Default by UIAlertActionStyle.default
-            
-            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
-                (result : UIAlertAction) -> Void in
-                print("OK")
-            }
-            
-            alertController.addAction(okAction)
-            self.present(alertController, animated: true, completion: nil)
-        }
+        //Check if netID is student
+//        }
+//        else if self.myVar == "false"{
+//            let alertController = UIAlertController(title: "Opps!", message: "This is not a correct NetID. Please try again!", preferredStyle: UIAlertControllerStyle.alert) //Replace UIAlertControllerStyle.Alert by UIAlertControllerStyle.alert
+//
+//
+//            // Replace UIAlertActionStyle.Default by UIAlertActionStyle.default
+//
+//            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) {
+//                (result : UIAlertAction) -> Void in
+//                print("OK")
+//            }
+//
+//            alertController.addAction(okAction)
+//            self.present(alertController, animated: true, completion: nil)
+//        }
     }
 }
 

@@ -31,7 +31,8 @@ class ClassList: UIViewController {
     override func viewDidLoad() {
         
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
-        NameLabel.text =  Lastname + ", here are your classes:"
+//        NameLabel.text =  Lastname + ", here are your classes:"
+        NameLabel.text = "Thanks for helping us test the app!"
         LoadIndicator.activityIndicatorViewStyle  = UIActivityIndicatorViewStyle.whiteLarge
         LoadIndicator.center = view.center
         LoadIndicator.hidesWhenStopped = true
